@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Rohit Mallick • Cybersecurity Student & Researcher</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    :root{
+      /* Cyber theme */
+      --primary-color:#00ff88;
+      --secondary-color:#0a0a0a;
+      --bg-color:#001F4D;
+      --bg-card:#023E7D;
+      --bg-card-hover:#0353A4;
+      --text-primary:#ffffff;
+      --text-secondary:#b0b0b0;
+      --border-color:#054A91;
+      --gradient-primary:linear-gradient(135deg,#00ff88 0%,#00cc6a 100%);
+      --gradient-dark:linear-gradient(135deg,#023E7D 0%,#001F4D 100%);
+      --shadow-card:0 8px 32px rgba(0,255,136,0.1);
+      --shadow-hover:0 16px 64px rgba(0,255,136,0.2);
+      --radius:12px;
+      --transition:all .3s cubic-bezier(.4,0,.2,1);
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{scroll-behavior:smooth;}
+    body{
+      font-family:'Inter',sans-serif;
+      color:var(--text-primary);
+      background:var(--bg-color);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+    .container{max-width:1200px;margin:0 auto;padding:0 20px;}
+
+    /* Navbar (merged) */
+    .navbar{
+      position:fixed;top:0;left:0;right:0;z-index:1000;
+      background:rgba(0,31,77,0.95);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border-color);
+      transition:var(--transition);
+    }
+    .nav-container{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 0;
+    }
+    .logo{
+      font-family:'JetBrains Mono',monospace;
+      font-size:1.25rem;font-weight:700;
+      color:var(--primary-color);text-decoration:none;
+    }
+    .nav-menu{display:flex;list-style:none;gap:2rem;}
+    .nav-link{
+      color:var(--text-secondary);text-decoration:none;font-weight:600;position:relative;
+      transition:var(--transition);
+    }
+    .nav-link:hover,.nav-link.active{color:var(--primary-color);}
+    .nav-link::after{
+      content:'';position:absolute;left:0;bottom:-6px;height:2px;width:0;background:var(--gradient-primary);
+      transition:width .25s ease;
+    }
+    .nav-link:hover::after,.nav-link.active::after{width:100%;}
+    .menu-toggle{display:none;background:none;border:none;color:var(--text-primary);font-size:1.5rem;cursor:pointer;}
+
+    /* Hero */
+    .hero{
+      min-height:100vh;display:flex;align-items:center;position:relative;background:var(--gradient-dark);overflow:hidden;
+      padding-top:80px;
+    }
+    .hero::before{
+      content:'';position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(0,255,136,.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0,204,106,.1) 0%, transparent 50%);
+      pointer-events:none;
+    }
+    .hero-content{position:relative;z-index:2;max-width:900px;margin:0 auto;text-align:center;}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:.5rem;
+      background:var(--gradient-primary);color:var(--secondary-color);
+      padding:.4rem 1rem;border-radius:999px;font-size:.85rem;font-weight:700;margin-bottom:1rem;
+    }
+    .hero-title{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;line-height:1.1;margin:.5rem 0 1rem;}
+    .hero-title .highlight{
+      background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .hero-subtitle{
+      font-family:'JetBrains Mono',monospace;color:var(--primary-color);
+      font-size:.95rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.75rem;
+    }
+    .hero-description{color:var(--text-secondary);max-width:700px;margin:0 auto 2rem;}
+    .hero-buttons{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+    .btn{
+      padding:12px 24px;border:none;border-radius:var(--radius);font-weight:700;text-decoration:none;
+      display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:var(--transition);font-size:.95rem;
+    }
+    .btn-primary{background:var(--gradient-primary);color:var(--secondary-color);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);}
+    .btn-outline{background:transparent;color:var(--primary-color);border:2px solid var(--primary-color);}
+    .btn-outline:hover{background:var(--primary-color);color:var(--secondary-color);}
+
+    /* Section shared */
+    .section{padding:5rem 0;}
+    .section-header{text-align:center;margin-bottom:3rem;}
+    .section-title{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;margin-bottom:.75rem;}
+    .section-subtitle{font-size:1.05rem;color:var(--text-secondary);max-width:700px;margin:0 auto;}
+
+    /* Stats (hero-style) */
+    .hero-stats{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;
+      margin:2rem auto 0;max-width:900px;
+    }
+    .hero-stat{
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:1.5rem;text-align:center;
+      transition:var(--transition);
+    }
+    .hero-stat:hover{transform:translateY(-4px);box-shadow:var(--shadow-card);background:var(--bg-card-hover);}
+    .hero-stat-number{font-size:2rem;font-weight:800;color:var(--primary-color);display:block;}
+    .hero-stat-label{font-size:.85rem;color:var(--text-secondary);letter-spacing:.05em;font-weight:600;text-transform:uppercase;}
+
+    /* Cards grids */
+    .cards-grid,.services-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.25rem;
+    }
+    .card,.service-card{
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;padding:2rem;position:relative;
+      transition:var(--transition);overflow:hidden;
+    }
+    .card::before,.service-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-primary);
+      transform:scaleX(0);transition:transform .3s ease;
+    }
+    .card:hover,.service-card:hover{background:var(--bg-card-hover);transform:translateY(-4px);box-shadow:var(--shadow-card);}
+    .card:hover::before,.service-card:hover::before{transform:scaleX(1);}
+    .card-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;}
+    .card-icon{
+      width:56px;height:56px;border-radius:12px;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;
+      color:var(--secondary-color);font-size:1.4rem;font-weight:900;
+    }
+    .card-title{font-size:1.25rem;font-weight:800;margin-bottom:.15rem;}
+    .card-subtitle{font-size:.9rem;color:var(--text-secondary);font-weight:600;}
+    .card-content{color:var(--text-secondary);}
+
+    .service-icon{font-size:2rem;color:var(--primary-color);margin-bottom:1rem;}
+    .service-title{font-size:1.25rem;font-weight:800;margin-bottom:.5rem;}
+    .service-description{color:var(--text-secondary);margin-bottom:1rem;}
+    .service-features{list-style:none;}
+    .service-features li{display:flex;align-items:center;gap:.5rem;color:var(--text-secondary);padding:.35rem 0;}
+    .service-features li::before{content:'✓';color:var(--primary-color);font-weight:900;}
+
+    /* Timeline */
+    .timeline{position:relative;padding:1rem 0;}
+    .timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(255,255,255,.1);transform:translateX(-50%);}
+    .timeline-item{display:flex;margin-bottom:3rem;position:relative;}
+    .timeline-item:nth-child(even){flex-direction:row-reverse;}
+    .timeline-content{
+      flex:1;max-width:45%;background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;padding:1.5rem;
+      transition:var(--transition);
+    }
+    .timeline-content:hover{transform:scale(1.02);box-shadow:var(--shadow-card);}
+    .timeline-dot{
+      width:14px;height:14px;background:var(--primary-color);border-radius:50%;position:absolute;left:50%;top:1rem;transform:translateX(-50%);
+      border:4px solid var(--bg-color);z-index:10;
+    }
+    .timeline-year{
+      position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+      background:var(--gradient-primary);color:var(--secondary-color);
+      padding:.35rem .75rem;border-radius:999px;font-weight:800;font-size:.8rem;
+    }
+
+    /* Skills badges alt */
+    .skills-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;
+    }
+    .skill-item{
+      background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:1.25rem;text-align:center;transition:var(--transition);
+    }
+    .skill-item:hover{transform:translateY(-3px);background:var(--bg-card-hover);box-shadow:var(--shadow-card);}
+    .skill-name{font-weight:800;margin-bottom:.35rem;}
+    .skill-level{font-size:.9rem;color:var(--text-secondary);}
+
+    /* Contact */
+    .contact{background:var(--gradient-dark);}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+    .contact-info h3{font-size:1.5rem;margin-bottom:1rem;color:var(--primary-color);}
+    .contact-item{display:flex;gap:1rem;align-items:center;margin-bottom:1rem;}
+    .contact-item i{color:var(--primary-color);width:22px;}
+    .form-group{margin-bottom:1rem;}
+    .form-label{display:block;margin-bottom:.4rem;color:var(--text-secondary);font-weight:600;}
+    .form-input,.form-textarea,.form-select{
+      width:100%;padding:12px 14px;background:var(--bg-card);
+      border:1px solid var(--border-color);border-radius:12px;color:var(--text-primary);
+      font-family:inherit;transition:var(--transition);
+    }
+    .form-textarea{min-height:120px;resize:vertical;}
+    .form-input:focus,.form-textarea:focus,.form-select:focus{
+      outline:none;border-color:var(--primary-color);box-shadow:0 0 0 3px rgba(0,255,136,.12);
+    }
+
+    /* Footer */
+    .footer{
+      background:#00183e;border-top:1px solid var(--border-color);padding:2.5rem 0 1.25rem;margin-top:2rem;text-align:center;color:#dfe7f1;
+    }
+    .footer .sub{opacity:.8;font-size:.95rem;margin-top:.35rem;}
+
+    /* Utilities */
+    .fade-in{opacity:0;transform:translateY(30px);}
+    .visible{opacity:1;transform:translateY(0);transition:all .6s ease;}
+    .quote{
+      font-style:italic;color:var(--text-secondary);text-align:center;padding:1.25rem;border-left:4px solid var(--primary-color);
+      background:#022b5f;border-radius:0 12px 12px 0;margin:1.25rem 0;
+    }
+
+    /* Responsive */
+    @media (max-width:992px){
+      .timeline::before{left:1rem;}
+      .timeline-content{max-width:calc(100% - 3rem);margin-left:3rem;}
+      .timeline-item:nth-child(even) .timeline-content{margin-left:3rem;margin-right:0;}
+      .timeline-dot{left:1rem;}
+    }
+    @media (max-width:768px){
+      .nav-menu{
+        position:fixed;top:64px;left:-100%;width:100%;height:calc(100vh - 64px);
+        background:var(--bg-color);flex-direction:column;gap:1.25rem;justify-content:flex-start;align-items:center;padding-top:2rem;
+        transition:var(--transition);
+      }
+      .nav-menu.active{left:0;}
+      .menu-toggle{display:block;}
+      .hero-buttons{flex-direction:column;}
+      .contact-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-container">
+        <a href="#home" class="logo">Rohit • CyberSec</a>
+        <ul class="nav-menu">
+          <li><a class="nav-link active" href="#home">Home</a></li>
+          <li><a class="nav-link" href="#about">About</a></li>
+          <li><a class="nav-link" href="#achievements">Achievements</a></li>
+          <li><a class="nav-link" href="#skills">Cyber Skills</a></li>
+          <li><a class="nav-link" href="#journey">Journey</a></li>
+          <li><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+        <button class="menu-toggle" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="hero-content fade-in">
+        <div class="hero-badge"><span>🎓</span> Student Cybersecurity Researcher</div>
+        <div class="hero-subtitle">Offensive Security • Ethical Hacking • CTF</div>
+        <h1 class="hero-title">Hi, I’m <span class="highlight">Rohit</span></h1>
+        <p class="hero-description">
+          A 16-year-old cybersecurity enthusiast focusing on penetration testing, exploit development, and real-world defense strategy.
+          Passionate about Hack The Box, CTFs, and teaching proactive security through practical labs and research.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#achievements" class="btn btn-primary"><i class="fas fa-flag"></i> Cyber Achievements</a>
+          <a href="#contact" class="btn btn-outline"><i class="fas fa-envelope"></i> Get In Touch</a>
+        </div>
+
+        <div class="hero-stats" style="margin-top:2rem">
+          <div class="hero-stat"><span class="hero-stat-number">[25]+</span><span class="hero-stat-label">HTB Machines Pwned</span></div>
+          <div class="hero-stat"><span class="hero-stat-number">[Top 10%]</span><span class="hero-stat-label">CTF Rankings</span></div>
+          <div class="hero-stat"><span class="hero-stat-number">+</span><span class="hero-stat-label">Cyber Awards</span></div>
+          <div class="hero-stat"><span class="hero-stat-number">[Security+ Prep]</span><span class="hero-stat-label">Cert Progress</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2 class="section-title">About Me</h2>
+        <p class="section-subtitle">
+          A dedicated student combining academic excellence with hands-on cybersecurity—building a red team mindset to strengthen real systems.
+        </p>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card fade-in">
+          <div class="card-header">
+            <div class="card-icon"><i class="fas fa-user-secret"></i></div>
+            <div>
+              <h3 class="card-title">Offensive Security Focus</h3>
+              <p class="card-subtitle">Web, Network, PrivEsc</p>
+            </div>
+          </div>
+          <div class="card-content">
+            Practical experience across reconnaissance, exploitation, post-exploitation, and reporting.
+            I actively practice labs, break down misconfigurations, and write clean remediation guidance for stakeholders.
+          </div>
+        </div>
+
+        <div class="card fade-in">
+          <div class="card-header">
+            <div class="card-icon"><i class="fas fa-terminal"></i></div>
+            <div>
+              <h3 class="card-title">Hack The Box & CTFs</h3>
+              <p class="card-subtitle">Walkthroughs & Write-ups</p>
+            </div>
+          </div>
+          <div class="card-content">
+            I document HTB/CTF solutions with methodology-first write-ups—focusing on reproducibility, root cause, mitigation, and defense-in-depth.
+          </div>
+        </div>
+
+        <div class="card fade-in">
+          <div class="card-header">
+            <div class="card-icon"><i class="fas fa-people-group"></i></div>
+            <div>
+              <h3 class="card-title">Community & Leadership</h3>
+              <p class="card-subtitle">Clubs • Workshops • Mentoring</p>
+            </div>
+          </div>
+          <div class="card-content">
+            I help peers set up labs, run phishing-awareness demos, and deliver short workshops on secure coding basics and threat modeling.
+          </div>
+        </div>
+      </div>
+
+      <div class="quote fade-in">
+        “Security isn’t a product—it’s a discipline. Breaking things responsibly teaches how to build them stronger.”
+      </div>
+    </div>
+  </section>
+
+  <!-- Achievements (Cyber-centric) -->
+  <section id="achievements" class="section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2 class="section-title">Cyber Achievements</h2>
+        <p class="section-subtitle">Hands-on milestones across HTB, CTFs, certifications, and extracurricular leadership.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card fade-in">
+          <div class="service-icon"><i class="fas fa-terminal"></i></div>
+          <h3 class="service-title">Hack The Box</h3>
+          <p class="service-description">Pwned <strong>[25+]</strong> machines spanning Linux/Windows, web exploits, and privilege escalation chains.</p>
+          <ul class="service-features">
+            <li>Focus: Enumeration-first, low-noise exploitation</li>
+            <li>Skills: SSRF, SQLi, XXE, LFI/RFI, AD basics</li>
+            <li>Tools: nmap, ffuf, Burp, linpeas/winPEAS, BloodHound</li>
+          </ul>
+        </div>
+
+        <div class="service-card fade-in">
+          <div class="service-icon"><i class="fas fa-flag"></i></div>
+          <h3 class="service-title">CTF Placements</h3>
+          <p class="service-description">Multiple top <strong>[10%]</strong> finishes; specialties in web, reversing, and forensics.</p>
+          <ul class="service-features">
+            <li>Write-ups with step-by-step exploit paths</li>
+            <li>Team collaboration and role rotation</li>
+            <li>Repeatable lab setup via Docker</li>
+          </ul>
+        </div>
+
+        <div class="service-card fade-in">
+          <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
+          <h3 class="service-title">Certs & Grades</h3>
+          <p class="service-description">Active prep for <strong>Security+</strong>; strong academic standing with cyber coursework.</p>
+          <ul class="service-features">
+            <li>[Security+ Practice Exams Completed]</li>
+            <li>[School Cyber/CS Grade: e.g., A / 95%]</li>
+            <li>Foundation: Networking, Linux, Scripting</li>
+          </ul>
+        </div>
+
+        <div class="service-card fade-in">
+          <div class="service-icon"><i class="fas fa-users"></i></div>
+          <h3 class="service-title">Extracurricular</h3>
+          <p class="service-description">Cyber club leadership, workshops, and open-source contributions.</p>
+          <ul class="service-features">
+            <li>Phishing simulation demos & awareness</li>
+            <li>Student sessions on secure coding basics</li>
+            <li>Blog/write-ups on HTB and CTF labs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cyber Skills -->
+  <section id="skills" class="section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2 class="section-title">Cyber Skills & Expertise</h2>
+        <p class="section-subtitle">Strengths built via labs, competitions, and methodical practice.</p>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card fade-in">
+          <div class="card-header">
+            <div class="card-icon"><i class="fas fa-network-wired"></i></div>
+            <div>
+              <h3 class="card-title">Penetration Testing</h3>
+              <p class="card-subtitle">Methodology-driven</p>
+            </div>
+          </div>
+          <div class="card-content">
+            Web and network assessments, auth bypass, and privilege escalation; reporting with risk, impact, and remediation mapping.
+          </div>
+        </div>
+
+        <div class="card fade-in">
+          <div class="card-header">
+            <div class="card-icon"><i class="fas fa-bug"></i></div>
+            <div>
+              <h3 class="card-title">Exploit Development</h3>
+              <p class="card-subtitle">Reversing & scripting</p>
+            </div>
+          </div>
+          <div class="card-content">
+            Basic BOFs, payload crafting, and PoCs using Python/Bash; debugging with GDB/Immunity and controlled environment testing.
+          </div>
+        </div>
+
+        <div class="card fade-in">
+          <div class="card-header">
+            <div class="card-icon"><i class="fas fa-magnifying-glass"></i></div>
+            <div>
+              <h3 class="card-title">Forensics & OSINT</h3>
+              <p class="card-subtitle">Evidence & intel</p>
+            </div>
+          </div>
+          <div class="card-content">
+            Log and memory triage, artifacts, metadata tracing, and open-source intelligence for attribution and lead generation.
+          </div>
+        </div>
+
+        <div class="card fade-in">
+          <div class="card-header">
+            <div class="card-icon"><i class="fas fa-shield-halved"></i></div>
+            <div>
+              <h3 class="card-title">Red Team Mindset</h3>
+              <p class="card-subtitle">Adversarial thinking</p>
+            </div>
+          </div>
+          <div class="card-content">
+            Attack-path mapping, chaining misconfigs, evasion basics, and translating findings into actionable defense-in-depth controls.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Journey Timeline (kept, refocused) -->
+  <section id="journey" class="section">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2 class="section-title">My Journey</h2>
+        <p class="section-subtitle">Growth across self-directed learning, hands-on labs, and leadership.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item fade-in">
+          <div class="timeline-year">2025</div>
+          <div class="timeline-content">
+            <h3 style="color:var(--primary-color);margin-bottom:.6rem;">Cyber Acceleration</h3>
+            <p style="color:var(--text-secondary);margin-bottom:.6rem;"><strong>2025 | Age 16</strong></p>
+            <p>Focused on HTB/CTFs, security fundamentals, and mentoring peers through workshops and lab sessions. Preparing for industry certifications.</p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+
+        <div class="timeline-item fade-in">
+          <div class="timeline-year">2024–25</div>
+          <div class="timeline-content">
+            <h3 style="color:#7CFFC4;margin-bottom:.6rem;">Academic & Technical Excellence</h3>
+            <p style="color:var(--text-secondary);margin-bottom:.6rem;"><strong>Grade 9–10 | Multiple Achievements</strong></p>
+            <p>National-level recognition and strong academics; pivoted project focus toward cybersecurity, labs, and applied research.</p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+
+        <div class="timeline-item fade-in">
+          <div class="timeline-year">2021–24</div>
+          <div class="timeline-content">
+            <h3 style="color:#7dccff;margin-bottom:.6rem;">Self-Directed Learning</h3>
+            <p style="color:var(--text-secondary);margin-bottom:.6rem;"><strong>Age 12–16 | Continuous Growth</strong></p>
+            <p>Built foundations in Linux, networking, and scripting; created personal labs, wrote early notes, and explored security tooling.</p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+
+        <div class="timeline-item fade-in">
+          <div class="timeline-year">2019–21</div>
+          <div class="timeline-content">
+            <h3 style="color:#ffd86b;margin-bottom:.6rem;">Discipline & Mindset</h3>
+            <p style="color:var(--text-secondary);margin-bottom:.6rem;"><strong>Sports & Routine</strong></p>
+            <p>Karate discipline and competitive spirit—habits that later translated to methodical problem-solving in cybersecurity.</p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section contact">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="section-subtitle">Open to collaboration, mentorship, workshops, and security research projects.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info card fade-in">
+          <h3>Contact Information</h3>
+
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <strong>Address</strong><br/>
+               Haldibari<br/>
+                 Cooch Behar – 735122<br/>
+                 West Bengal, India
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <strong>Phone</strong><br/>
+              +91 8945944695
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <strong>Email</strong><br/>
+              <a href="mailto:ankushinfinity09@gmail.com" style="color:inherit;text-decoration:none;">ankushinfinity09@gmail.com</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-graduation-cap"></i>
+            <div>
+              <strong>Academic Status</strong><br/>
+              Grade 10 Student<br/>Expected Graduation: 2025
+            </div>
+          </div>
+        </div>
+
+        <div class="card fade-in" style="height:fit-content;">
+          <div class="card-header">
+            <div class="card-icon"><i class="fas fa-handshake-angle"></i></div>
+            <div>
+              <h3 class="card-title">Why Connect With Me?</h3>
+              <p class="card-subtitle">Hands-on security, strong academics</p>
+            </div>
+          </div>
+
+          <div class="card-content">
+            <div style="margin-bottom:1rem;">
+              <h4 style="color:var(--primary-color);margin-bottom:.35rem;">Demonstrated Practice</h4>
+              <p>Active HTB/CTF track record, methodical write-ups, and clear remediation—practical over theoretical.</p>
+            </div>
+
+            <div style="margin-bottom:1rem;">
+              <h4 style="color:#7CFFC4;margin-bottom:.35rem;">Community & Teaching</h4>
+              <p>Run workshops, awareness sessions, and help peers set up labs—security as a shared discipline.</p>
+            </div>
+
+            <div style="margin-bottom:1rem;">
+              <h4 style="color:#79b4ff;margin-bottom:.35rem;">Academic Readiness</h4>
+              <p>Strong grades and ongoing cert prep ensure fundamentals are solid and current.</p>
+            </div>
+
+            <div style="margin-bottom:1.25rem;">
+              <h4 style="color:#ffd86b;margin-bottom:.35rem;">Collaboration</h4>
+              <p>Open to ethical hacking research, content, and student/community security initiatives.</p>
+            </div>
+
+            <div class="hero-buttons">
+              <a href="tel:+918945944695" class="btn btn-primary"><i class="fas fa-phone"></i> Call</a>
+              <a href="mailto:ankushinfinity09@gmail.com" class="btn btn-outline"><i class="fas fa-paper-plane"></i> Email</a>
+            </div>
+          </div>
+
+          <!-- Academic quick stats -->
+          <div class="hero-stats" style="margin-top:1.25rem;">
+            <div class="hero-stat"><span class="hero-stat-number">99.7%</span><span class="hero-stat-label">Grade 3</span></div>
+            <div class="hero-stat"><span class="hero-stat-number">95.6%</span><span class="hero-stat-label">Grade 5</span></div>
+            <div class="hero-stat"><span class="hero-stat-number">95%+</span><span class="hero-stat-label">Expected Grade 10</span></div>
+            <div class="hero-stat"><span class="hero-stat-number">30+</span><span class="hero-stat-label">Courses Completed</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Ankush Mandal. Cybersecurity Student & Researcher.</p>
+      <p class="sub">“Committed to building safer systems through responsible offensive security and education.”</p>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <button class="btn btn-primary" id="scrollTopBtn" style="
+    position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;
+    display:none;align-items:center;justify-content:center;padding:0;"><i class="fas fa-arrow-up"></i></button>
+
+  <script>
+    // Mobile menu
+    const menuToggle=document.querySelector('.menu-toggle');
+    const navMenu=document.querySelector('.nav-menu');
+    menuToggle.addEventListener('click',()=>navMenu.classList.toggle('active'));
+
+    // Smooth scroll + close mobile menu
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        const href=a.getAttribute('href');
+        if(href && href.startsWith('#')){
+          e.preventDefault();
+          const t=document.querySelector(href);
+          if(t){t.scrollIntoView({behavior:'smooth',block:'start'});navMenu.classList.remove('active');}
+        }
+      });
+    });
+
+    // Active link on scroll
+    const sections=document.querySelectorAll('section[id]');
+    const navLinks=document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll',()=>{
+      let cur='';
+      sections.forEach(s=>{if(scrollY>=(s.offsetTop-200))cur=s.getAttribute('id');});
+      navLinks.forEach(l=>{
+        l.classList.remove('active');
+        if(l.getAttribute('href')==='#'+cur) l.classList.add('active');
+      });
+      // Navbar solid
+      const nav=document.querySelector('.navbar');
+      nav.style.background=window.scrollY>100?'rgba(0,31,77,0.98)':'rgba(0,31,77,0.95)';
+    });
+
+    // Intersection Observer for fade-ins
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){entry.target.classList.add('visible');io.unobserve(entry.target);}
+      });
+    },{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+    document.querySelectorAll('.fade-in').forEach(el=>io.observe(el));
+
+    // Scroll top button
+    const scrollTopBtn=document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll',()=>{
+      if(window.scrollY>300) scrollTopBtn.style.display='flex'; else scrollTopBtn.style.display='none';
+    });
+    scrollTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+    // Keyboard focus outline (accessibility)
+    const focusables=document.querySelectorAll('a,button,input,textarea,select');
+    focusables.forEach(el=>{
+      el.addEventListener('focus',function(){this.style.outline='2px solid #00ff88';this.style.outlineOffset='2px';});
+      el.addEventListener('blur',function(){this.style.outline='none';});
+    });
+  </script>
+</body>
+</html>
